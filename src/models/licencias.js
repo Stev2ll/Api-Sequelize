@@ -18,7 +18,7 @@ export const licencias =  sequelize.define('licencia',
             type: DataTypes.BOOLEAN,
             defaultValue: false
         },
-        categorias:{
+        categoria:{
             type: DataTypes.STRING
         }
     }, {

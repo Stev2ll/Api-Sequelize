@@ -1,4 +1,4 @@
-const {Router } = require('express');
+import  {Router } from 'express'
 import { getRol, getRoles } from './controller.js';
 // const controller = require('./controller.js')
 

@@ -8,7 +8,8 @@ export const usuarios = sequelize.define('usuarios', {
         primaryKey: true
     },
     correo: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        unique: true
     },
     contrasena: {
         type: DataTypes.STRING
