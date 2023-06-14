@@ -30,6 +30,9 @@ export const autos = sequelize.define('autos',{
     },
     estado:{
         type: DataTypes.STRING
+    },
+    tipo:{
+        type: DataTypes.STRING
     }
 
 },{
