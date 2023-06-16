@@ -1,8 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
 
-
-
 export const autos = sequelize.define('autos',{
     id_auto:{
         type: DataTypes.INTEGER,

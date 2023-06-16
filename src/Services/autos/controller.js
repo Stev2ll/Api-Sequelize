@@ -1,5 +1,5 @@
 import { autos } from "../../models/autos.js";
-import { verificarTipo, Formato, PrimerLetra, segundaLetra, estados, verificarAnio } from "./rules.js";
+import { verificarTipo, Formato, PrimerLetra, segundaLetra, estados, verificarAnio, verificarExtensionFoto } from "./rules.js";
 
 
 export const getAuto = async (req, res) => {
@@ -108,6 +108,39 @@ export const eliminarAutos = async (req, res) => {
 export const editarAutos = async (req, res) => {
     const { id } = req.params;
     const { placas, marca, modelo, anio, fotos, detalles, estado, tipo } = req.body;
+    // Validar formato de la placa
+    if (!Formato(placas)) {
+        return res.status(400).json({ message: 'Error: El formato de la placa es inválido' });
+    }
+
+    // Validar primera letra de la placa
+    if (!PrimerLetra(placas)) {
+        return res.status(400).json({ message: 'Error: La primera letra de la placa es inválida' });
+    }
+
+    // Validar segunda letra de la placa
+    if (!segundaLetra(placas)) {
+        return res.status(400).json({ message: 'Error: La segunda letra de la placa es inválida' });
+    }
+
+    // Validar estado
+    if (!estados(estado)) {
+        return res.status(400).json({ message: 'Error: El estado ingresado es inválido' });
+    }
+
+    // Validar año
+    if (!verificarAnio(anio)) {
+        return res.status(400).json({ message: 'Error: El año ingresado es inválido' });
+    }
+
+    if (!verificarTipo(tipo)) {
+        return res.status(400).json({ message: 'Error: El tipo ingresado es inválido' });
+    }
+    // Validar extensión de la foto
+    if (!verificarExtensionFoto(fotos)) {
+        return res.status(400).json({ message: 'Error: La extensión de la foto es inválida' });
+    }
+
 
     try {
         const editar = await autos.update({
@@ -127,6 +160,6 @@ export const editarAutos = async (req, res) => {
         res.send(editar);
 
     } catch (error) {
-
+        return res.status(500).json({ message: error.message });
     }
 }

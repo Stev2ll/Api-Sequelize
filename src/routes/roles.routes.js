@@ -5,6 +5,9 @@ import { actualizarUser, eliminarUser, getUser, getUsers, insertarUser } from '.
 import { getAuto, getAutos, editarAutos, eliminarAutos, insertarAuto } from '../Services/autos/controller.js';
 import { getClientes, getCliente, editarCliente, eliminarCliente, insertarCliente } from '../Services/clientes/controller.js';
 import { editarLicencia, eliminarLicencia, getLicencia, getLicencias, insertarLicencia } from '../Services/licencias/controller.js';
+import { getReservas , getReserva, getUserReservas, createReserva,updateReserva , updateEstado} from '../Services/revservas/controller.js';
+import { cancelarPago, crearPago, getPago, getPagos, getPagosUser } from '../Services/pagos/controller.js';
+
 // import { rolesRutas } from '../Services/roles/routes.js'
 // const roles = require('../Services/roles/routes.js');
 
@@ -38,5 +41,18 @@ router.get('/autos/:id', getAuto)
 router.post('/autos', insertarAuto)
 router.delete('/autos/:id', eliminarAutos);
 router.put('/autos/:id', editarAutos);
+
+router.get('/reservas', getReservas)
+router.get('/reservas/:id', getReserva);
+router.get('/reserva/cliente/:id', getUserReservas);
+router.post('/reservas', createReserva);
+router.put('/reserva/estado/:id', updateEstado);
+
+
+router.get('/pagos', getPagos)
+router.get('/pagos/:id', getPago)
+router.get('/pagos/cliente/:id', getPagosUser)
+router.post('/pagos', crearPago);
+router.delete('/pagos/:id', cancelarPago)
 
 export default router;

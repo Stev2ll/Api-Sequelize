@@ -50,7 +50,7 @@ clientes.belongsTo(licencias,{
     foreignKey: 'id_licencia' ,
     targetKey: 'id_licencia'
 })
-
+    
 licencias.hasOne(clientes,{
     foreignKey: 'id_licencia' ,
     targetKey: 'id_licencia' 
