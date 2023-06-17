@@ -115,3 +115,18 @@ export const verificarExtensionFoto = (foto) => {
 
   return false;
 };
+
+export const verificarPrecio = (precio) =>{
+
+    const anioAux = parseInt(precio);
+    if(isNaN(anioAux)){
+        return false;
+    }
+
+    if(anioAux <0 || anioAux > 10000){
+        return false;
+    }
+
+    return true;
+
+}

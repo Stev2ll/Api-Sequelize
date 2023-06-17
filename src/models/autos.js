@@ -31,8 +31,10 @@ export const autos = sequelize.define('autos',{
     },
     tipo:{
         type: DataTypes.STRING
+    },
+    precio:{
+        type: DataTypes.INTEGER
     }
-
 },{
     timestamps: false
 })

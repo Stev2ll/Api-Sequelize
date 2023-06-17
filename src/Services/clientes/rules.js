@@ -55,7 +55,7 @@ export const verificarExtensionFoto = (foto) => {
     if (extensionesValidas.includes(extension)) {
         return true;
     }
-
+    
     return false;
 };
 

@@ -1,5 +1,6 @@
 import { autos } from "../../models/autos.js";
-import { verificarTipo, Formato, PrimerLetra, segundaLetra, estados, verificarAnio, verificarExtensionFoto } from "./rules.js";
+import { aEntero, letrasMayusculas } from "./helpers.js";
+import { verificarTipo, Formato, PrimerLetra, segundaLetra, estados, verificarAnio, verificarExtensionFoto, verificarPrecio } from "./rules.js";
 
 
 export const getAuto = async (req, res) => {
@@ -30,25 +31,33 @@ export const getAutos = async (req, res) => {
 }
 
 export const insertarAuto = async (req, res) => {
-    const { placas, marca, modelo, anio, fotos, detalles, estado, tipo } = req.body;
+    const { placas, marca, modelo, anio, fotos, detalles, estado, tipo, precio } = req.body;
 
     // Verificar si algún campo está vacío
-    if (!placas || !marca || !modelo || !anio || !fotos || !detalles || !estado || !tipo) {
+    if (!placas || !marca || !modelo || !anio || !fotos || !detalles || !estado || !tipo || !precio) {
         return res.status(400).json({ message: 'Error: Todos los campos deben ser completados' });
     }
 
+    const marcaAux = letrasMayusculas(marca);
+    const modeloAux = letrasMayusculas(modelo);
+    const placasAux = letrasMayusculas(placas);
+    const estadoAux = letrasMayusculas(estado);
+    const tipoAux = letrasMayusculas(tipo);
+    const detallesAux = letrasMayusculas(detalles);
+    const precioAux = aEntero(precio);
+
     // Validar formato de la placa
-    if (!Formato(placas)) {
+    if (!Formato(placasAux)) {
         return res.status(400).json({ message: 'Error: El formato de la placa es inválido' });
     }
 
     // Validar primera letra de la placa
-    if (!PrimerLetra(placas)) {
+    if (!PrimerLetra(placasAux)) {
         return res.status(400).json({ message: 'Error: La primera letra de la placa es inválida' });
     }
 
     // Validar segunda letra de la placa
-    if (!segundaLetra(placas)) {
+    if (!segundaLetra(placasAux)) {
         return res.status(400).json({ message: 'Error: La segunda letra de la placa es inválida' });
     }
 
@@ -70,16 +79,22 @@ export const insertarAuto = async (req, res) => {
         return res.status(400).json({ message: 'Error: La extensión de la foto es inválida' });
     }
 
+    if (!verificarPrecio(precioAux)) {
+        return res.status(400).json({ message: 'Error: El precio ingresado es inválido' });
+    }
+
+
     try {
         const insertarAuto = await autos.create({
-            placas,
-            marca,
-            modelo,
+            placas: placasAux,
+            marca: marcaAux,
+            modelo: modeloAux,
             anio,
-            detalles,
+            detalles: detallesAux,
             fotos,
-            estado,
-            tipo
+            estado: estadoAux,
+            tipo: tipoAux,
+            precio: precioAux
         });
 
         console.log('AUTO CREADO,', insertarAuto);
@@ -107,24 +122,32 @@ export const eliminarAutos = async (req, res) => {
 
 export const editarAutos = async (req, res) => {
     const { id } = req.params;
-    const { placas, marca, modelo, anio, fotos, detalles, estado, tipo } = req.body;
+    const { placas, marca, modelo, anio, fotos, detalles, estado, tipo, precio } = req.body;
     // Validar formato de la placa
-    if (!Formato(placas)) {
+    const marcaAux = letrasMayusculas(marca);
+    const modeloAux = letrasMayusculas(modelo);
+    const placasAux = letrasMayusculas(placas);
+    const estadoAux = letrasMayusculas(estado);
+    const tipoAux = letrasMayusculas(tipo);
+    const detallesAux = letrasMayusculas(detalles);
+    const precioAux = aEntero(precio);
+
+    if (!Formato(placasAux)) {
         return res.status(400).json({ message: 'Error: El formato de la placa es inválido' });
     }
 
     // Validar primera letra de la placa
-    if (!PrimerLetra(placas)) {
+    if (!PrimerLetra(placasAux)) {
         return res.status(400).json({ message: 'Error: La primera letra de la placa es inválida' });
     }
 
     // Validar segunda letra de la placa
-    if (!segundaLetra(placas)) {
+    if (!segundaLetra(placasAux)) {
         return res.status(400).json({ message: 'Error: La segunda letra de la placa es inválida' });
     }
 
     // Validar estado
-    if (!estados(estado)) {
+    if (!estados(estadoAux)) {
         return res.status(400).json({ message: 'Error: El estado ingresado es inválido' });
     }
 
@@ -133,7 +156,7 @@ export const editarAutos = async (req, res) => {
         return res.status(400).json({ message: 'Error: El año ingresado es inválido' });
     }
 
-    if (!verificarTipo(tipo)) {
+    if (!verificarTipo(tipoAux)) {
         return res.status(400).json({ message: 'Error: El tipo ingresado es inválido' });
     }
     // Validar extensión de la foto
@@ -141,17 +164,22 @@ export const editarAutos = async (req, res) => {
         return res.status(400).json({ message: 'Error: La extensión de la foto es inválida' });
     }
 
+    if (!verificarPrecio(precioAux)) {
+        return res.status(400).json({ message: 'Error: El precio ingresado es inválido' });
+    }
+
 
     try {
         const editar = await autos.update({
-            placas: placas,
-            marca: marca,
-            modelo: modelo,
+            placas: placasAux,
+            marca: marcaAux,
+            modelo: modeloAux,
             anio: anio,
             fotos: fotos,
-            detalles: detalles,
-            estado: estado,
-            tipo: tipo
+            detalles: detallesAux,
+            estado: estadoAux,
+            tipo: tipoAux,
+            precio: precioAux
         }, {
             where: {
                 id_auto: id

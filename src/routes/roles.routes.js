@@ -7,6 +7,8 @@ import { getClientes, getCliente, editarCliente, eliminarCliente, insertarClient
 import { editarLicencia, eliminarLicencia, getLicencia, getLicencias, insertarLicencia } from '../Services/licencias/controller.js';
 import { getReservas , getReserva, getUserReservas, createReserva,updateReserva , updateEstado} from '../Services/revservas/controller.js';
 import { cancelarPago, crearPago, getPago, getPagos, getPagosUser } from '../Services/pagos/controller.js';
+import { crearMensaje } from '../Services/mensajes/controller.js';
+import { crearHistorial, obtenerHistorial } from '../Services/historial/controller.js';
 
 // import { rolesRutas } from '../Services/roles/routes.js'
 // const roles = require('../Services/roles/routes.js');
@@ -54,5 +56,12 @@ router.get('/pagos/:id', getPago)
 router.get('/pagos/cliente/:id', getPagosUser)
 router.post('/pagos', crearPago);
 router.delete('/pagos/:id', cancelarPago)
+
+
+router.post('/mensajes', crearMensaje);
+
+
+router.post('/historial', crearHistorial)
+router.get('/historial', obtenerHistorial)
 
 export default router;

@@ -1,11 +1,13 @@
 import { clientes } from '../../models/clientes.js'
 import { usuarios } from '../../models/usuarios.js';
-import {verificarNombre, 
-    verificarCedula, 
-    verificarEstado, 
-    verificarExtensionFoto, 
+import { letrasMayusculas } from './helpers.js';
+import {
+    verificarNombre,
+    verificarCedula,
+    verificarEstado,
+    verificarExtensionFoto,
     verificarGenero,
-    
+
 } from './rules.js'
 
 
@@ -34,6 +36,11 @@ export const getClientes = async (req, res) => {
 }
 export const insertarCliente = async (req, res) => {
     const { nombre, apellido, cedula, genero, estado, foto, id_usuario, id_licencia } = req.body;
+
+    const nombreAux = letrasMayusculas(nombre);
+    const apellidoAux = letrasMayusculas(apellido);
+    const generoAux = letrasMayusculas(genero);
+    const estadoAux = letrasMayusculas(estado);
 
     if (!verificarNombre(nombre)) {
         return res.status(400).json({ message: 'Error: El nombre ingresado es inválido.' });
@@ -68,11 +75,11 @@ export const insertarCliente = async (req, res) => {
 
         // Insertar el cliente en la base de datos
         const crearCliente = await clientes.create({
-            nombre,
-            apellido,
+            nombre: nombreAux,
+            apellido: apellidoAux,
             cedula,
-            genero,
-            estado,
+            genero: generoAux,
+            estado: estadoAux,
             foto,
             id_usuario,
             id_licencia
@@ -87,6 +94,10 @@ export const insertarCliente = async (req, res) => {
 export const editarCliente = async (req, res) => {
     const { id } = req.params;
     const { nombre, apellido, cedula, genero, estado, foto } = req.body;
+    const nombreAux = letrasMayusculas(nombre);
+    const apellidoAux = letrasMayusculas(apellido);
+    const generoAux = letrasMayusculas(genero);
+    const estadoAux = letrasMayusculas(estado);
 
     if (!verificarNombre(nombre)) {
         return res.status(400).json({ message: 'Error: El nombre ingresado es inválido.' });
@@ -111,11 +122,11 @@ export const editarCliente = async (req, res) => {
     try {
         const updateCliente = await clientes.update(
             {
-                nombre: nombre,
-                apellido: apellido,
+                nombre: nombreAux,
+                apellido: apellidoAux,
                 cedula: cedula,
-                genero: genero,
-                estado: estado,
+                genero: generoAux,
+                estado: estadoAux,
                 foto: foto
             },
             {
