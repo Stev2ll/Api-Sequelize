@@ -12,7 +12,7 @@ export const licencias =  sequelize.define('licencia',
             type: DataTypes.STRING,
         },
         fecha_caducidad:{
-            type: DataTypes.DATE
+            type: DataTypes.DATEONLY
         },
         estado:{
             type: DataTypes.BOOLEAN,

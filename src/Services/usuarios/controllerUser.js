@@ -14,9 +14,10 @@ export const getUsers = async (req, res) => {
 
 
 export const insertarUser = async (req, res) => {
-    const { id_rol, correo, contrasena } = req.body;
+    const { id_rol, correo, contrasena , estado} = req.body;
 
     const correoAux = correo.toLowerCase();
+    const estadoAux = estado.toUpperCase();
     if (!validarCorreoContrasena(correoAux, contrasena)) {
         return res.status(403).json({ message: "Error: Los datos ingresados son inválidos." });
     }
@@ -37,6 +38,7 @@ export const insertarUser = async (req, res) => {
             id_rol,
             correo: correoAux,
             contrasena,
+            estado: estadoAux,
         });
 
         console.log("Nuevo Usuario", nuevoUser);
@@ -65,13 +67,14 @@ export const getUser = async (req, res) => {
 }
 export const actualizarUser = async (req, res) => {
     const { id } = req.params;
-    const { correo, contrasena } = req.body;
+    const { correo, contrasena , estado} = req.body;
   
     if (!validarCorreoContrasena(correo, contrasena)) {
       return res.status(403).json({ message: "Error: Los datos ingresados son inválidos." });
     }
   
     const correoAux = correo.toLowerCase();
+    const estadoAux = estado.toUpperCase();
   
     try {
       // Verificar si el usuario ya existe
@@ -81,7 +84,7 @@ export const actualizarUser = async (req, res) => {
       }
   
       // Actualizar los datos del usuario
-      const actualizar = await usuarios.update({ correo: correoAux, contrasena }, {
+      const actualizar = await usuarios.update({ correo: correoAux, contrasena, estado: estadoAux }, {
         where: {
           id_usuario: id
         }

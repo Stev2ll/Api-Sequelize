@@ -13,6 +13,9 @@ export const usuarios = sequelize.define('usuarios', {
     },
     contrasena: {
         type: DataTypes.STRING
+    },
+    estado:{
+        type: DataTypes.STRING
     }
 
 },
