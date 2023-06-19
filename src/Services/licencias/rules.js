@@ -6,13 +6,14 @@ export const verificarFechas = (fecha_recepcion) => {
 
     const diferenciaDias = fechaRecepcion.diff(fechaActual, 'days');
 
-    if (!diferenciaDias >= 7) {
+    if (!diferenciaDias >= 15) {
         console.log('NO SE ADMITE LICENCIAS CADUCADAS :(')
         return false;
     }
 
     return true;
 };
+
 export const verificarExtensionFoto = (foto) => {
     const extensionesValidas = ['jpg', 'jpeg', 'png', 'gif'];
 

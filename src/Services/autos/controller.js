@@ -1,5 +1,5 @@
 import { autos } from "../../models/autos.js";
-import { aEntero, letrasMayusculas } from "./helpers.js";
+import { aEntero, guardarImagen, letrasMayusculas } from "./helpers.js";
 import { verificarTipo, Formato, PrimerLetra, segundaLetra, estados, verificarAnio, verificarExtensionFoto, verificarPrecio } from "./rules.js";
 
 
@@ -34,7 +34,7 @@ export const insertarAuto = async (req, res) => {
     const { placas, marca, modelo, anio, fotos, detalles, estado, tipo, precio } = req.body;
 
     // Verificar si algún campo está vacío
-    if (!placas || !marca || !modelo || !anio || !fotos || !detalles || !estado || !tipo || !precio) {
+    if (!placas || !marca || !modelo || !anio || !detalles || !estado || !tipo || !precio) {
         return res.status(400).json({ message: 'Error: Todos los campos deben ser completados' });
     }
 
@@ -62,7 +62,7 @@ export const insertarAuto = async (req, res) => {
     }
 
     // Validar estado
-    if (!estados(estado)) {
+    if (!estados(estadoAux)) {
         return res.status(400).json({ message: 'Error: El estado ingresado es inválido' });
     }
 
@@ -71,7 +71,7 @@ export const insertarAuto = async (req, res) => {
         return res.status(400).json({ message: 'Error: El año ingresado es inválido' });
     }
 
-    if (!verificarTipo(tipo)) {
+    if (!verificarTipo(tipoAux)) {
         return res.status(400).json({ message: 'Error: El tipo ingresado es inválido' });
     }
     // Validar extensión de la foto
@@ -84,6 +84,8 @@ export const insertarAuto = async (req, res) => {
     }
 
 
+    // const rutaImagen1= await guardarImagen(fotos);
+    const rutaImagen1= '/img/autos/mazda.png'
     try {
         const insertarAuto = await autos.create({
             placas: placasAux,
@@ -91,7 +93,7 @@ export const insertarAuto = async (req, res) => {
             modelo: modeloAux,
             anio,
             detalles: detallesAux,
-            fotos,
+            fotos: rutaImagen1,
             estado: estadoAux,
             tipo: tipoAux,
             precio: precioAux

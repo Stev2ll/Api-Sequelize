@@ -1,5 +1,6 @@
 import { licencias } from "../../models/licencias.js";
 import { verificarCategorias, verificarEstado, verificarExtensionFoto, verificarFechas } from "./rules.js";
+import { letrasMayusculas } from './helpers.js';
 
 
 export const getLicencias = async (req, res) => {
@@ -29,34 +30,34 @@ export const getLicencia = async (req, res) => {
 
 export const insertarLicencia = async (req, res) => {
     const { id_licencia, foto, fecha_caducidad, estado, categoria } = req.body;
+    const estadoAux = letrasMayusculas(estado);
+    const categoriaAux = letrasMayusculas(categoria);
 
     if (!id_licencia || !foto || !fecha_caducidad || !estado || !categoria) {
         return res.status(400).json({ message: 'Faltan campos obligatorios' });
     }
 
-    if (!verificarCategorias(categoria)) {
+    if (!verificarCategorias(categoriaAux)) {
         return res.status(400).json({ message: 'ERROR: No se encuentra la categoria' });
     }
     if (!verificarExtensionFoto(foto)) {
         return res.status(400).json({ message: 'La extension de la foto no es compatible' });
     }
-    if (!verificarEstado(estado)) {
+    if (!verificarEstado(estadoAux)) {
         return res.status(400).json({ message: 'ERROR: EL ESTADO DEBE SER BOLEANO' });
     }
     if (!verificarFechas(fecha_caducidad)) {
-        return res.status(400).json({ message: 'LICENCIA CADUCADA' });
+        return res.status(400).json({ message: 'LICENCIA CADUCADA O PRONTO CADUCARA' });
     }
     try {
         const insert = await licencias.create({
             id_licencia,
             foto,
             fecha_caducidad,
-            estado,
-            categoria,
+            estado: estadoAux,
+            categoria: categoriaAux,
         });
-
-        console.log('Licencia CREADA:', insert);
-        res.sendStatus(200);
+        res.sendStatus(200).json({message: 'Licencia Creada'});
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }

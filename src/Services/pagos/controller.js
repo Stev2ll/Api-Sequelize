@@ -1,4 +1,6 @@
 import { pagos } from "../../models/pagos.js"
+import { letrasMayusculas } from "./helper.js";
+import { verificarFecha, verificarMonto, verificarTipo } from "./rules.js";
 
 
 export const getPagos = async (req, res) => {
@@ -42,10 +44,27 @@ export const getPagosUser = async (req, res) => {
 
 export const crearPago = async (req, res) => {
     const { fecha_pago, tipo, monto, id_cliente, id_auto } = req.body;
+
+    const tipoAux = letrasMayusculas(tipo);
+
+    if(!fecha_pago || !tipo || !id_auto || !id_cliente || !monto){
+        return res.status(404).json({message: 'TODOS LOS CAMPOS SON OBLIGATORIOS'});
+    }
+
+    if(!verificarFecha(fecha_pago)){
+        return res.status(404).json({message: 'FECHAS DE PAGO INCORRECTOS'});
+    }
+    if(!verificarMonto(monto)){
+        return res.status(404).json({message: '$ Monto incorrecto'});
+    }
+    if(!verificarTipo(tipoAux)){
+        return res.status(404).json({message: 'Tipo de Pago incorrecto'});
+    }
+
     try {
         const insert = await pagos.create({
             fecha_pago: fecha_pago,
-            tipo: tipo,
+            tipo: tipoAux,
             monto: monto,
             id_cliente: id_cliente,
             id_auto: id_auto

@@ -1,11 +1,19 @@
 
 import { mensajes } from "../../models/mensajes.js";
+import { verificarFecha } from "./rules.js";
 
 
 
 export const crearMensaje = async (req, res) => {
     const { id_emisor, id_receptor, mensaje, fecha_envio } = req.body;
 
+    if (!id_emisor || !id_receptor || !mensaje || !fecha_envio) {
+        return res.status(400).json({ message: 'TODOS LOS CAMPOS SON OBLIGATORIOS' });
+    }
+
+    if (!verificarFecha(fecha_envio)) {
+        return res.status(400).json({ message: 'ERROR EN FECHAS' });
+    }
     try {
 
         const nuevoMensaje = await mensajes.create({

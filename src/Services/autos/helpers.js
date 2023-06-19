@@ -1,4 +1,7 @@
 
+import fs from 'fs';
+import path from 'path'
+
 export const letrasMayusculas = (carro) => {
     const autos = carro.toUpperCase();
     return autos;
@@ -9,3 +12,19 @@ export const aEntero = (precio) => {
 
     return precioAux;
 }
+
+export const guardarImagen = (foto) =>  {
+    return new Promise((resolve, reject) => {
+      const nombreArchivo = `${Date.now()}_${foto.originalname}`;
+  
+      const rutaDestino = path.join('../../img/autos/', nombreArchivo);
+  
+      fs.writeFile(rutaDestino, foto.buffer, (error) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(rutaDestino);
+        }
+      });
+    });
+  };
