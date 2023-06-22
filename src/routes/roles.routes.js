@@ -2,7 +2,7 @@ import  {Router } from 'express';
 
 import { getRol, getRoles } from '../Services/roles/controller.js';
 import { actualizarUser, eliminarUser, getUser, getUsers, insertarUser } from '../Services/usuarios/controllerUser.js';
-import { getAuto, getAutos, editarAutos, eliminarAutos, insertarAuto } from '../Services/autos/controller.js';
+import { getAuto, getAutos, editarAutos, eliminarAutos, insertarAuto, upload } from '../Services/autos/controller.js';
 import { getClientes, getCliente, editarCliente, eliminarCliente, insertarCliente } from '../Services/clientes/controller.js';
 import { editarLicencia, eliminarLicencia, getLicencia, getLicencias, insertarLicencia } from '../Services/licencias/controller.js';
 import { getReservas , getReserva, getUserReservas, createReserva,updateReserva , updateEstado} from '../Services/revservas/controller.js';
@@ -40,7 +40,7 @@ router.delete('/clientes/:id', eliminarCliente);
 
 router.get('/autos', getAutos);
 router.get('/autos/:id', getAuto)
-router.post('/autos', insertarAuto)
+router.post('/autos', upload ,insertarAuto);
 router.delete('/autos/:id', eliminarAutos);
 router.put('/autos/:id', editarAutos);
 

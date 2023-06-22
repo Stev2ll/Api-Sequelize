@@ -1,7 +1,8 @@
 import { autos } from "../../models/autos.js";
 import { aEntero, guardarImagen, letrasMayusculas } from "./helpers.js";
 import { verificarTipo, Formato, PrimerLetra, segundaLetra, estados, verificarAnio, verificarExtensionFoto, verificarPrecio } from "./rules.js";
-
+import multer from 'multer';
+import path from 'path'
 
 export const getAuto = async (req, res) => {
     const { id } = req.params;
@@ -30,10 +31,39 @@ export const getAutos = async (req, res) => {
 
 }
 
-export const insertarAuto = async (req, res) => {
-    const { placas, marca, modelo, anio, fotos, detalles, estado, tipo, precio } = req.body;
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'img/autos')
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+})
 
+export const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: '10000000'
+    },
+    fileFilter: (req, file, cb) => {
+        const fileTypes = /jpeg|jpg|png/
+        const mimType = fileTypes.test(file.mimetype)
+        const extname = fileTypes.test(path.extname(file.originalname))
+
+        if(mimType && extname) {
+            return cb(null, true)
+        }
+        cb('DAME UN FORMATO CORRECTO')
+        }
+
+}).single('fotos')
+
+
+export const insertarAuto = async (req, res) => {
+    const { placas, marca, modelo, anio, detalles, estado, tipo, precio } = req.body;
+    const fotos = req.file.path;
     // Verificar si algún campo está vacío
+
     if (!placas || !marca || !modelo || !anio || !detalles || !estado || !tipo || !precio) {
         return res.status(400).json({ message: 'Error: Todos los campos deben ser completados' });
     }
@@ -62,6 +92,7 @@ export const insertarAuto = async (req, res) => {
     }
 
     // Validar estado
+
     if (!estados(estadoAux)) {
         return res.status(400).json({ message: 'Error: El estado ingresado es inválido' });
     }
@@ -74,10 +105,10 @@ export const insertarAuto = async (req, res) => {
     if (!verificarTipo(tipoAux)) {
         return res.status(400).json({ message: 'Error: El tipo ingresado es inválido' });
     }
-    // Validar extensión de la foto
-    if (!verificarExtensionFoto(fotos)) {
-        return res.status(400).json({ message: 'Error: La extensión de la foto es inválida' });
-    }
+    // // Validar extensión de la foto
+    // if (!verificarExtensionFoto(fotos)) {
+    //     return res.status(400).json({ message: 'Error: La extensión de la foto es inválida' });
+    // }
 
     if (!verificarPrecio(precioAux)) {
         return res.status(400).json({ message: 'Error: El precio ingresado es inválido' });
@@ -85,7 +116,7 @@ export const insertarAuto = async (req, res) => {
 
 
     // const rutaImagen1= await guardarImagen(fotos);
-    const rutaImagen1= '/img/autos/mazda.png'
+    // const rutaImagen1 = '/img/autos/mazda.png'
     try {
         const insertarAuto = await autos.create({
             placas: placasAux,
@@ -93,7 +124,7 @@ export const insertarAuto = async (req, res) => {
             modelo: modeloAux,
             anio,
             detalles: detallesAux,
-            fotos: rutaImagen1,
+            fotos,
             estado: estadoAux,
             tipo: tipoAux,
             precio: precioAux

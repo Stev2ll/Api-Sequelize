@@ -16,4 +16,8 @@ app.use((req, res, next) => {
 app.use('/apiCar', router);
 app.use('/apiCar', rolesRutas);
 
+// Static FOLDER
+
+app.use('/img/autos', express.static('./img/autos'))
+
 export default app;

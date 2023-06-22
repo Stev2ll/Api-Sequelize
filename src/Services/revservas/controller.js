@@ -71,7 +71,7 @@ export const createReserva = async (req, res) => {
         return res.status(404).json({ message: 'EL Monto es invalido' });
     }
 
-    //=============0 LOGICA DE NEGOCIO =================================================================
+    //============= REGLAS VALIDADAS ================================================================
     try {
         const licencia = await clientes.findOne({
             where: { id_cliente },
@@ -88,7 +88,7 @@ export const createReserva = async (req, res) => {
         const fechasValidas =  verificarDias(fecha_entrega, fecha_devolucion);
         const licenciaValida = await verificarLicencia(licencia.id_licencia);
 
-        if (!usuarioValido || autoDisponible || !fechasValidas || !licenciaValida) {
+        if (!usuarioValido || !autoDisponible || !fechasValidas || !licenciaValida) {
             return res.status(404).json({ message: 'NO SE CUMPLEN LAS CONDICIONES' });
         }
 
