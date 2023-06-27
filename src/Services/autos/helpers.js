@@ -29,6 +29,7 @@ export const guardarImagen = (foto) => {
       } else {
         resolve(rutaDestino);
       }
+    
     });
   });
 };

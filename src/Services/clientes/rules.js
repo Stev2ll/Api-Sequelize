@@ -38,7 +38,7 @@ export const verificarGenero = (genero) => {
 
 export const verificarEstado = (estado) => {
 
-    const estadoV = ['HABILITADO', 'NO HABILITADO'];
+    const estadoV = ['HABILITADO', 'NO HABILITADO', 'PENDIENTE'];
     const estadoP = estado.toUpperCase();
     if (!estadoV.includes(estadoP)) {
         return false;

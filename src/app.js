@@ -19,5 +19,7 @@ app.use('/apiCar', rolesRutas);
 // Static FOLDER
 
 app.use('/img/autos', express.static('./img/autos'))
+app.use('/img/licencia', express.static('./img/licencia'))
+app.use('/img/clientes', express.static('./img/clientes'))
 
 export default app;

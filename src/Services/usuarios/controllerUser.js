@@ -65,6 +65,7 @@ export const getUser = async (req, res) => {
     }
 
 }
+
 export const actualizarUser = async (req, res) => {
     const { id } = req.params;
     const { correo, contrasena , estado} = req.body;

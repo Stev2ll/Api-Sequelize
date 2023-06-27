@@ -8,7 +8,7 @@ export const licencias =  sequelize.define('licencia',
             autoIncrement: false,
             primaryKey: true
         },
-        foto:{
+        fotolicencia:{
             type: DataTypes.STRING,
         },
         fecha_caducidad:{
