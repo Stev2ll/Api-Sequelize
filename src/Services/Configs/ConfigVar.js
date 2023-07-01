@@ -1,6 +1,6 @@
 // config.js
 let iva = 0.16; // Valor predeterminado del IVA
-let precioMinimo = 0;
+let precioMinimo = 10;
 let precioMaximo = 100;
 let diasMinimo = 1;
 let diasMaximo = 30;

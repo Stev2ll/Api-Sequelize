@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { getDiasMaximo, getDiasMinimo, getPrecioMaximo, getPrecioMinimo } from "../Configs/ConfigVar.js";
 
 export const validarFechaEntrega = (fecha) => {
   const fechaIngresada = moment(fecha, 'YYYY-MM-DD', true);
@@ -8,11 +9,9 @@ export const validarFechaEntrega = (fecha) => {
   }
 
   const fechaActual = moment().startOf('day');
-  const fechaMinima = fechaActual.clone().add(2, 'days');
 
-  return fechaIngresada.isSame(fechaActual, 'day') || fechaIngresada.isAfter(fechaMinima, 'day');
-}
-
+  return fechaIngresada.isSameOrAfter(fechaActual, 'day');
+};
 
 export const determinarFechaDevolucion = (fechaIngreso, fechaEntrega) => {
   const fechaIngresoMoment = moment(fechaIngreso, 'YYYY-MM-DD', true);
@@ -22,21 +21,36 @@ export const determinarFechaDevolucion = (fechaIngreso, fechaEntrega) => {
     return false; // Fecha inválida
   }
 
-  const fechaMaxima = fechaIngresoMoment.clone().add(3, 'days');
+  const diferenciaDias = fechaEntregaMoment.diff(fechaIngresoMoment, 'days');
+  const diasMaximo = getDiasMaximo();
 
-  return fechaEntregaMoment.isSameOrAfter(fechaIngresoMoment, 'day') && fechaEntregaMoment.isSameOrBefore(fechaMaxima, 'day');
-}
+  return diferenciaDias <= diasMaximo && fechaEntregaMoment.isSameOrAfter(fechaIngresoMoment, 'day');
+};
 
 
-export const verificarMonto = (monto) =>{
-    const montoAux = parseFloat(monto);
-    if(isNaN(montoAux)){
-        return false;
-    }
-    if(montoAux < 10 || montoAux > 5000){
-        return false;
-    }
+// export const determinarFechaDevolucion = (fechaIngreso, fechaEntrega) => {
+//   const fechaIngresoMoment = moment(fechaIngreso, 'YYYY-MM-DD', true);
+//   const fechaEntregaMoment = moment(fechaEntrega, 'YYYY-MM-DD', true);
 
-    return true;
+//   if (!fechaIngresoMoment.isValid() || !fechaEntregaMoment.isValid()) {
+//     return false; // Fecha inválida
+//   }
+
+//   const fechaMaxima = fechaIngresoMoment.clone().add(getDiasMaximo(), 'days');
+
+//   return fechaEntregaMoment.isSameOrAfter(fechaIngresoMoment, 'day') && fechaEntregaMoment.isSameOrBefore(fechaMaxima, 'day');
+// }
+
+
+export const verificarMonto = (monto) => {
+  const montoAux = parseFloat(monto);
+  if (isNaN(montoAux)) {
+    return false;
+  }
+  if (montoAux < getPrecioMinimo() || montoAux > getPrecioMaximo()) {
+    return false;
+  }
+
+  return true;
 }
 

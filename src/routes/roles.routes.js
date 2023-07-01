@@ -1,14 +1,15 @@
 import { Router } from 'express';
 
 import { getRol, getRoles } from '../Services/roles/controller.js';
-import { actualizarUser, eliminarUser, getUser, getUsers, insertarUser } from '../Services/usuarios/controllerUser.js';
+import { Login  , actualizarUser, eliminarUser, getUser, getUsers, insertarUser, logOut } from '../Services/usuarios/controllerUser.js';
 import { getAuto, getAutos, editarAutos, eliminarAutos, insertarAuto, upload, editarAutosSinFoto, cambiarEstadoAuto } from '../Services/autos/controller.js';
 import { getClientes, getCliente, editarCliente, eliminarCliente, insertarCliente, uploadClient, getClientesPendiente, editarEstadosCliente} from '../Services/clientes/controller.js';
 import { editarLicencia, eliminarLicencia, getLicencia, getLicencias, insertarLicencia , uploadLicencias } from '../Services/licencias/controller.js';
-import { getReservas, getReserva, getUserReservas, createReserva, updateReserva, updateEstado } from '../Services/revservas/controller.js';
+import { getReservas, getReserva, getUserReservas, createReserva,getReservasPendiente, updateReserva, updateEstado } from '../Services/revservas/controller.js';
 import { cancelarPago, crearPago, getPago, getPagos, getPagosUser } from '../Services/pagos/controller.js';
 import { crearMensaje } from '../Services/mensajes/controller.js';
-import { crearHistorials, obtenerHistorial } from '../Services/historial/controller.js';
+import { crearHistorials, obtenerHistorial , obtenerHistoriales} from '../Services/historial/controller.js';
+import { DatosVar, editaVars } from '../Services/Configs/Controller.js';
 
 // import { rolesRutas } from '../Services/roles/routes.js'
 // const roles = require('../Services/roles/routes.js');
@@ -16,11 +17,15 @@ import { crearHistorials, obtenerHistorial } from '../Services/historial/control
 
 const router = new Router();
 
+router.get('/config', DatosVar)
+router.put('/config', editaVars);
 router.get('/roles', getRoles);
 router.get('/roles/:id', getRol);
 
 router.get('/user', getUsers)
 router.get('/user/:id', getUser)
+router.post('/login', Login)
+router.post('/logOut', logOut)
 router.post('/user', insertarUser);
 router.put('/user/:id', actualizarUser);
 router.delete('/user:id',eliminarUser);
@@ -38,7 +43,7 @@ router.post('/cliente', uploadClient, insertarCliente);
 router.put('/clientes/:id', uploadClient, editarCliente);
 router.put('/clientesEstado/:id', editarEstadosCliente);
 router.delete('/clientes/:id', eliminarCliente);
-
+    
 router.get('/autos', getAutos);
 router.get('/autos/:id', getAuto);
 router.post('/autos', upload, insertarAuto);
@@ -48,6 +53,7 @@ router.put('/autosfile/:id', editarAutosSinFoto);
 router.put('/autosEstado/:id', cambiarEstadoAuto)
 
 router.get('/reservas', getReservas)
+router.get('/reservasPendiente', getReservasPendiente)
 router.get('/reservas/:id', getReserva);
 router.get('/reserva/cliente/:id', getUserReservas);
 router.post('/reservas', createReserva);
@@ -55,14 +61,14 @@ router.put('/reserva/estado/:id', updateEstado);
 
 router.get('/pagos', getPagos)
 router.get('/pagos/:id', getPago)
-router.get('/pagos/cliente/:id', getPagosUser)
+router.get('/pagosCliente/:id', getPagosUser)
 router.post('/pagos', crearPago);
 router.delete('/pagos/:id', cancelarPago)
-
 
 router.post('/mensajes', crearMensaje);
 
 router.post('/historial', crearHistorials)
-router.get('/historial', obtenerHistorial);
+router.get('/historial', obtenerHistoriales)
+router.get('/historial/:id', obtenerHistorial);
 
 export default router;

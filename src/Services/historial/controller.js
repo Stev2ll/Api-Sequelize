@@ -6,20 +6,20 @@ export const crearHistorials = async (req, res) => {
 
     const { id_cliente, id_pago, fecha_renta, comentario } = req.body;
 
-    if (!id_cliente || !id_pago || !comentario || fecha_renta) {
+    if (!id_cliente || !id_pago || !comentario || !fecha_renta) {
         return res.status(400).json({ message: 'COMPLETE TODOS  LOS CAMPOS' })
     }
 
-    if (!verificarFecha(fecha_renta)) {
-        return res.status(400).json({ message: 'ERROR EN LA FECHA ' })
-    }
+    // if (!verificarFecha(fecha_renta)) {
+    //     return res.status(400).json({ message: 'ERROR EN LA FECHA ' })
+    // }
     const comentarioAux = Minuscula(comentario);
     try {
         const crearhistorial = await historials.create({
             id_cliente,
             id_pago,
             fecha_renta,
-            comentario: comentarioAux
+            comentario
         })
 
         res.send('INGRESADO CORRECTAMENTE')
@@ -40,11 +40,11 @@ export const obtenerHistoriales = async (req, res) => {
 }
 
 export const obtenerHistorial = async (req, res) => {
-    const { id_cliente } = req.params;
+    const { id } = req.params;
     try {
         const obtain = await historials.findAll({
             where: {
-                id_cliente: id_cliente
+                id_cliente: id
             }
         })
         res.send(obtain)

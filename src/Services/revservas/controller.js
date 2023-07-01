@@ -17,6 +17,19 @@ export const getReservas = async (req, res) => {
     }
 }
 
+export const getReservasPendiente = async (req, res) => {
+    try {
+      const obtenerReserva = await reservas.findAll({
+        where: {
+          estado: 'PENDIENTE',
+        },
+      });
+      res.json(obtenerReserva);
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  };
+  
 export const getReserva = async (req, res) => {
     const { id } = req.params;
 
@@ -60,7 +73,7 @@ export const createReserva = async (req, res) => {
     }
 
     if (!validarFechaEntrega(fecha_entrega)) {
-        return res.status(404).json({ message: 'LA FECHA ES INVALIDA' });
+        return res.status(404).json({ message: 'LA FECHA ES INVALIDA de ENTREGA' });
     }
 
     if (!determinarFechaDevolucion(fecha_entrega, fecha_devolucion)) {

@@ -44,36 +44,40 @@ export const getPagosUser = async (req, res) => {
 
 export const crearPago = async (req, res) => {
     const { fecha_pago, tipo, monto, id_cliente, id_auto } = req.body;
-
-    const tipoAux = letrasMayusculas(tipo);
-
-    if(!fecha_pago || !tipo || !id_auto || !id_cliente || !monto){
-        return res.status(404).json({message: 'TODOS LOS CAMPOS SON OBLIGATORIOS'});
-    }
-
-    if(!verificarFecha(fecha_pago)){
-        return res.status(404).json({message: 'FECHAS DE PAGO INCORRECTOS'});
-    }
-    if(!verificarMonto(monto)){
-        return res.status(404).json({message: '$ Monto incorrecto'});
-    }
-    if(!verificarTipo(tipoAux)){
-        return res.status(404).json({message: 'Tipo de Pago incorrecto'});
-    }
-
     try {
-        const insert = await pagos.create({
-            fecha_pago: fecha_pago,
-            tipo: tipoAux,
-            monto: monto,
-            id_cliente: id_cliente,
-            id_auto: id_auto
-        })
-        console.log('PAGO REGISTRADO', insert);
-        res.send('Pago realizado');
+        const tipoAux = letrasMayusculas(tipo);
+
+        if (!fecha_pago || !tipo || !id_auto || !id_cliente || !monto) {
+            return res.status(404).json({ message: 'TODOS LOS CAMPOS SON OBLIGATORIOS' });
+        }
+
+        if (!verificarFecha(fecha_pago)) {
+            return res.status(404).json({ message: 'FECHAS DE PAGO INCORRECTOS' });
+        }
+        if (!verificarMonto(monto)) {
+            return res.status(404).json({ message: '$ Monto incorrecto' });
+        }
+        if (!verificarTipo(tipoAux)) {
+            return res.status(404).json({ message: 'Tipo de Pago incorrecto' });
+        }
+
+        try {
+            const insert = await pagos.create({
+                fecha_pago: fecha_pago,
+                tipo: tipoAux,
+                monto: monto,
+                id_cliente: id_cliente,
+                id_auto: id_auto
+            })
+            console.log('PAGO REGISTRADO', insert);
+            res.send('Pago realizado');
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
+
 }
 
 export const cancelarPago = async (req, res) => {

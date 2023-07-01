@@ -82,7 +82,6 @@ export const estados = (estados) => {
         return true;
     }
     return false;
-
 }
 
 export const verificarAnio = (anio) => {
